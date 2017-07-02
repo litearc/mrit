@@ -15,7 +15,9 @@ function o = cmap(m, cm, varargin)
   %  o                mapped image. [x y (red, green, blue) ...].
   %
 
-  [clim] = setopts(varargin, {'clim', []});
+  % set default arguments
+  v = ap2s(varargin);
+  clim = def(v, 'clim', []);
 
   if isempty(clim)
     [cmin, cmax] = lims(m);

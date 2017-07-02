@@ -21,9 +21,11 @@ function [rfg, w] = rfhs(mu, b, A0, T, varargin)
   %  rfg              rf pulse (G). (vector)
   %
 
-  % set default parameters
-  [gam, dt, fshow] = setopts(varargin, {'gam', 4.258, 'dt', .004, ...
-    'show', 0});
+  % set default arguments
+  v = ap2s(varargin);
+  dt    = def(v, 'dt', .004);
+  gam   = def(v, 'gam', 4.258);
+  fshow = def(v, 'show', 0);
 
   t = [-T/2:dt:T/2]';
   n = length(t);

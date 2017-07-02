@@ -1,8 +1,8 @@
 function m = lim(m, th, varargin)
   %
-  %  caps the values of the array above and/or below some percentile.
+  %  limits the values of the array within some range.
   %
-  %  function o = cap(m, th, varargin)
+  %  function o = lim(m, th, varargin)
   %
   %  inputs ....................................................................
   %  m                input array. (N-D array)

@@ -17,7 +17,9 @@ function o = fig(w, h, varargin)
   %  o                figure handle. (float)
   %
 
-  [units] = setopts(varargin, {'units', 'centimeters'});
+  % set default arguments
+  v = ap2s(varargin);
+  units = def(v, 'units', 'centimeters');
 
   o = gcf;
   set(o, 'units', units);

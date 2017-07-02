@@ -25,8 +25,12 @@ function g = gtrap(a, s, varargin)
   %  g                trapezoidal gradient. (G/cm)
   %
 
-  [len, area, dt, gam] = setopts(varargin, {'len', 0, 'area', 0, 'dt', .004, ...
-    'gam', 4.258});
+  % set default arguments
+  v = ap2s(varargin);
+  area = def(v, 'area', 0);
+  dt   = def(v, 'dt', .004);
+  gam  = def(v, 'gam', 4.258);
+  len  = def(v, 'len', 0);
 
   g = trap(a, s*dt, 'len', round(len/dt), 'area', area/(gam*dt));
 

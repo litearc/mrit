@@ -24,8 +24,13 @@ function [rf, g, i] = rfepi(dx, dy, tbx, tby, repy, varargin)
   %  i                info struct.
   %
 
-  [gm, sm, dt, gam, fa] = setopts(varargin, {'gm', 4, 'sm', 15, 'dt', .004, ...
-    'gam', 4.258, 'fa', pi/2});
+  % set default arguments
+  v = ap2s(varargin);
+  dt  = def(v, 'dt', .004);
+  gm  = def(v, 'gm', 4);
+  sm  = def(v, 'sm', 15);
+  fa  = def(v, 'fa', pi/2);
+  gam = def(v, 'gam', 4.258);
 
   % epi gradient
   nl = round(tby/dy*repy)+1; % total # lines.

@@ -22,7 +22,10 @@ function [w, o] = fwhm(x, y, varargin)
   %                   (float)
   %
 
-  [fmax, zbl] = setopts(varargin, {'fmax', .5, 'zbl', 0});
+  % set default arguments
+  v = ap2s(varargin);
+  fmax = def(v, 'fmax', .5);
+  zbl  = def(v, 'zbl', 0);
   
   if isvector(y) && length(y) == size(y,2), y = y(:); end
   if isvector(x) && length(x) == size(x,2), x = x(:); end

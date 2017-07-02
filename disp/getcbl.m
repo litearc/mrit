@@ -24,8 +24,13 @@ function [t, l] = getcbl(lims, varargin)
   %  l                tick labels. (cell array of strings)
   %
 
-  [h, hc, hf, lset, lspc] = setopts(varargin, {'h', [], 'hc', [], 'hf', [], ...
-    'lset', 1, 'lspc', 32});
+  % set default arguments
+  v = ap2s(varargin);
+  h    = def(v, 'h', []);
+  hc   = def(v, 'hc', []);
+  hf   = def(v, 'hf', []);
+  lset = def(v, 'lset', 1);
+  lspc = def(v, 'lspc', 32);
 
   if ~isempty(hf) && ~isempty(hc)
     a = get(hf, 'Position'); a = a(4);

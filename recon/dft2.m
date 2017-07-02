@@ -23,8 +23,11 @@ function m = dft2(r, varargin)
   %  m                reconstructed image. [x y ...] (complex)
   %
 
-  [comb, dir, cmaps] = setopts(varargin, {'comb', 'ss', 'dir', 'rev', ...
-    'cmaps', []});
+  % set default arguments
+  v = ap2s(varargin);
+  cmaps = def(v, 'cmaps', []);
+  comb  = def(v, 'comb', 'ss');
+  dir   = def(v, 'dir', 'rev');
 
   s = size(r);
   [~,~,nc,no] = size(r);

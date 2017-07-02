@@ -23,7 +23,10 @@ function w = trap(a, s, varargin)
   %  w                trapezoid waveform. (vector)
   %
 
-  [len, area] = setopts(varargin, {'len', 0, 'area', 0});
+  % set default arguments
+  v = ap2s(varargin);
+  area = def(v, 'area', 0);
+  len  = def(v, 'len', 0);
   
   % if area is negative, create positive waveform and invert at the end
   area_neg = (area<0);

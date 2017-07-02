@@ -35,7 +35,11 @@ function h = mplot(o, x, y, xl, yl, t, l)
       o = {};
   end
 
-  [ylimits, cdisp, isangle] = setopts(o, {'ylimits', [], 'cdisp', 'mp', 'angle', 0});
+  % set default arguments
+  v = ap2s(o);
+  cdisp   = def(v, 'cdisp', 'mp');
+  isangle = def(v, 'angle', 0);
+  ylimits = def(v, 'ylimits', []);
  
   % set default parameter values
   if nargin < 4, xl = ''; end

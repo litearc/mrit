@@ -19,7 +19,9 @@ function y = bdcov(n, p, tr, varargin)
   %  originally written by Gary Glover.
   %
 
-  [beg] = setopts(varargin, {'beg', 0});
+  % set default arguments
+  v = ap2s(varargin);
+  beg = def(v, 'beg', 0);
 
   n1 = 5.0; t1 = 1.1; n2 = 12.0; t2 = 0.9; a2 = 0.4; nh = 30;
   tt = 1:nh;

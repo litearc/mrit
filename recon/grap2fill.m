@@ -21,7 +21,10 @@ function k = grap2fill(r, x, s, c, varargin)
   %  k                k-space with missing entries filled in
   %
 
-  [o, ochk] = setopts(varargin, {'o', ~x, 'ochk', 1});
+  % set default arguments
+  v = ap2s(varargin);
+  o    = def(v, 'o', ~x);
+  ochk = def(v, 'ochk', 1);
 
   % calculate various # points
   [np, nv, nc] = size(r);

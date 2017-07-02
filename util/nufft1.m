@@ -20,7 +20,11 @@ function o = nufft1(r, k, n, varargin)
   %  originally written by John Pauly.
   %
 
-  [kern, kw, osf] = setopts(varargin, {'kern', 'tri', 'kw', 2.5, 'osf', 3});
+  % set default arguments
+  v = ap2s(varargin);
+  kern = def(v, 'kern', 'tri');
+  kw   = def(v, 'kw', 2.5);
+  osf  = def(v, 'osf', 3);
 
   % format data
   r = r(:);

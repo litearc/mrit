@@ -12,7 +12,10 @@ function hc = cbar(varargin)
   %  hc               colorbar handle. (float)
   %
 
-  [label, lims] = setopts(varargin, {'label', [], 'lims', []});
+  % set default arguments
+  v = ap2s(varargin);
+  label = def(v, 'label', []);
+  lims  = def(v, 'lims', []);
 
   h1 = get(gca, 'Position');
   hc = colorbar;

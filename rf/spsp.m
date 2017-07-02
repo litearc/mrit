@@ -27,8 +27,14 @@ function [rf g i] = spsp(dx, df, tbx, tbf, repf, varargin)
   %  i                info struct.
   %
 
-  [gm, sm, dt, gam, fa, flyback] = setopts(varargin, {'gm', 4, 'sm', 15, ...
-    'dt', .004, 'gam', 4.258, 'fa', pi/2, 'flyback', 1});
+  % set default arguments
+  v = ap2s(varargin);
+  dt      = def(v, 'dt', .004);
+  fa      = def(v, 'fa', pi/2);
+  flyback = def(v, 'flyback', 1);
+  gam     = def(v, 'gam', 4.258);
+  gm      = def(v, 'gm', 4);
+  sm      = def(v, 'sm', 15);
 
   if flyback
 

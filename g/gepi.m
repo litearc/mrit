@@ -25,8 +25,12 @@ function [g, i] = gepi(kxm, kym, nl, varargin)
   %                   the 2nd column the phase-encodes. [points axis] (G/cm)
   %
 
-  [gm, sm, dt, gam] = setopts(varargin, {'gm', 4, 'sm', 15, 'dt', .004, ...
-    'gam', 4.258});
+  % set default arguments
+  v = ap2s(varargin);
+  dt  = def(v, 'dt', .004);
+  gam = def(v, 'gam', 4.258);
+  gm  = def(v, 'gm', 4);
+  sm  = def(v, 'sm', 15);
 
   % readout gradient
   g1 = gtrap(gm, sm, 'area', 2*kxm);

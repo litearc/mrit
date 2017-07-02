@@ -46,10 +46,20 @@ function h = imdisp(u, varargin)
   %  h                figure handle. (float)
   %
 
-  [nrows, cbon, cblab, ftitle, defmag, o, onth, oith, olim, ulim, t, ucmap] = ...
-    setopts(varargin, {'nrows', [], 'cbon', 0, 'cblab', '', 'title', '', ...
-    'defmag', 1, 'o', [], 'onth', 20, 'oith', [], 'olim', [], 'ulim', [], ...
-    't', [], 'ucmap', []});
+  % set default arguments
+  v = ap2s(varargin);
+  cblab  = def(v, 'cblab', '');
+  cbon   = def(v, 'cbon', 0);
+  defmag = def(v, 'defmag', 1);
+  ftitle = def(v, 'title', '');
+  nrows  = def(v, 'nrows', []);
+  o      = def(v, 'o', []);
+  oith   = def(v, 'oith', []);
+  olim   = def(v, 'olim', []);
+  onth   = def(v, 'onth', 20);
+  t      = def(v, 't', []);
+  ucmap  = def(v, 'ucmap', []);
+  ulim   = def(v, 'ulim', []);
 
   % not really important (somewhat arbitrary) values
   cbes = 80;   % colorbar figure extra space

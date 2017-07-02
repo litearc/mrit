@@ -33,7 +33,12 @@ function o = grap2dft(r, s, f, varargin)
   %  o                reconstructed image
   %
 
-  [out, nkx, tell] = setopts(varargin, {'out', 'm', 'nkx', 3, 'tell', 1});
+  % set default arguments
+  v = ap2s(varargin);
+  out     = def(v, 'out', 'm');
+  nkx     = def(v, 'nkx', 3);
+  tell    = def(v, 'tell', 1);
+  use_mex = def(v, 'mex', 1);
   
   if tell, fprintf('grap2dft: initializing ...\n'); end
 
@@ -44,11 +49,8 @@ function o = grap2dft(r, s, f, varargin)
   nl = length(s);
   [np,nv,nc,ns,nt] = size(r);
   ntf = size(f,5);
-  o = zeros(np,nl,nc,ns,nt);
+  o = complex(zeros(np,nl,nc,ns,nt));
   o(:,find(s),:,:,:) = r;
-
-  a = repmat(s(:)', [np, 1]); % sampled lines
-  b = zeros(np, nl);          % what to fill in
 
   % creates GRAPPA kernel for a given line based on nearest sampled lines
   function k = ykern(i)
@@ -60,6 +62,8 @@ function o = grap2dft(r, s, f, varargin)
     if (iu==nl+1), k(:,end) = []; end
   end
 
+  a = repmat(s(:)', [np, 1]); % sampled lines
+  b = zeros(np, nl);          % what to fill in
   nchar = [];
 
   % fill in each non-sampled line
@@ -91,11 +95,15 @@ function o = grap2dft(r, s, f, varargin)
           fprintf('\r');
         end
         if ntf ~= 1, gc = grap2coef(f(:,:,:,is,it), yk); end
-        o(:,:,:,is,it) = grap2fill(o(:,:,:,is,it), a, yk, gc, 'o', b);
+        if use_mex && exist('grap2fillm')
+          o(:,:,:,is,it) = grap2fillm(o(:,:,:,is,it), b, yk, gc);
+        else
+          o(:,:,:,is,it) = grap2fill(o(:,:,:,is,it), a, yk, gc, 'o', b);
+        end
       end
     end
   end
-  
+
   % exit out of carriage-return
   if tell, fprintf('\n'); end
 
@@ -105,4 +113,5 @@ function o = grap2dft(r, s, f, varargin)
   end
 
 end
+
 

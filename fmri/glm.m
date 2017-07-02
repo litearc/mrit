@@ -27,8 +27,13 @@ function [t c p] = glm(m, s, r, tr, varargin)
   %  p                p-value map. [x y z]
   %
   
-  [dop, ord, dob, sdb, npb] = setopts(varargin, {'dop', 1, 'ord', 4, ...
-    'dob', 0, 'sdb', 1, 'npb', 3});
+  % set default arguments
+  v = ap2s(varargin);
+  dob  = def(v, 'dob', 0);
+  dop  = def(v, 'dop', 1);
+  npb  = def(v, 'npb', 3);
+  ord  = def(v, 'ord', 4);
+  sdb  = def(v, 'sdb', 1);
 
   m = abs(m); % in case complex.
   [nx,ny,nz,nt] = size(m);

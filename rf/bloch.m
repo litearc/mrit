@@ -45,6 +45,20 @@ function [M, t] = bloch(rf, g, p, varargin)
   [dt, gam, M0, T1, T2, B0, B1, np, use_mex, out, time] = setopts(varargin, ...
     {'dt', .004, 'gam', 4.258, 'M0', [], 'T1', [], 'T2', [], 'B0', [], ...
     'B1', [], 'np', 64, 'mex', [], 'out', 'all', 'time', 0});
+
+  % set default arguments
+  v = ap2s(varargin);
+  B0      = def(v, 'B0', []);
+  B1      = def(v, 'B1', []);
+  dt      = def(v, 'dt', .004);
+  gam     = def(v, 'gam', 4.258);
+  M0      = def(v, 'M0', []);
+  T1      = def(v, 'T1', []);
+  T2      = def(v, 'T2', []);
+  np      = def(v, 'np', 64);
+  out     = def(v, 'out', 'all');
+  time    = def(v, 'time', 0);
+  use_mex = def(v, 'mex', []);
   
   [nrows, ncols] = size(p);
   rf = rf(:);

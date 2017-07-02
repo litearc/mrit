@@ -17,7 +17,9 @@ function o = pfilt(m, varargin)
   %  originally written by Gary Glover.
   %
 
-  [r] = setopts(varargin, {'r', 1});
+  % set default arguments
+  v = ap2s(varargin);
+  r  = def(v, 'r', 1);
 
   [nx,ny,nz] = size(m);
   siggain = .5;

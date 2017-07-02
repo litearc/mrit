@@ -11,8 +11,9 @@ function M = fftc(m, varargin)
 	%  M                output.(complex N-D array)
   %
 
-  % don't use 'dims' for now, something buggy with it...
-  [dims] = setopts(varargin, {'dims', []});
+  % set default arguments
+  v = ap2s(varargin);
+  dims = def(v, 'dims', []); % don't use 'dims' for now (buggy)
 
   ss = sum(abs(m(:)).^2);
   if isempty(dims),

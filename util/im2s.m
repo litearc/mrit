@@ -16,7 +16,9 @@ function s = im2s(f, ny, nx, varargin)
   %  s                image mask. (array)
   %
 
-  [ns] = setopts(varargin, {'ns', -1});
+  % set default arguments
+  v = ap2s(varargin);
+  ns = def(v, 'ns', -1);
 
   if nargin == 2, nx = ny; end
   im = rgb2gray(imread(f));

@@ -18,7 +18,10 @@ function p = pfit(x, y, o, varargin)
   %                   (vector)
   %
 
-  [w, objf] = setopts(varargin, {'w', [], 'objf', 'L2'});
+  % set default arguments
+  v = ap2s(varargin);
+  objf = def(v, 'objf', 'L2');
+  w    = def(v, 'w', []);
 
   % weighting matrix
   n = length(x);

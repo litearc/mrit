@@ -15,7 +15,10 @@ function o = getfa(rf, varargin)
   %  o                flip angle. (rad)
   %
 
-  [gam, dt] = setopts(varargin, {'gam', 4.258, 'dt', .004});
+  % set default arguments
+  v = ap2s(varargin);
+  dt  = def(v, 'dt', .004);
+  gam = def(v, 'gam', 4.258);
 
   rf = rf(:);
   m = bloch(rf, 0*rf, [0 0 1], 'gam', gam, 'dt', dt);

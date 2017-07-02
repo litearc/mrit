@@ -12,7 +12,9 @@ function o = sense(m, c, varargin)
   %  o                reconstructed image. [x y z ...].
   %
 
-  [tell] = setopts(varargin, {'tell', 0});
+  % set default arguments
+  v = ap2s(varargin);
+  tell = def(v, 'tell', 0);
   
   if tell, fprintf('sense: initializing ...\n'); end
   nchar = [];

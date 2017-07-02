@@ -17,7 +17,9 @@ function m = mask(im, varargin)
   %  m                output mask. (logical N-D array)
   %
 
-  [nbins] = setopts(varargin, {'nbins', 10});  
+  % set default arguments
+  v = ap2s(varargin);
+  nbins = def(v, 'nbins', 10);
 
   % in case image is complex (assume not negative)
   im = abs(im);

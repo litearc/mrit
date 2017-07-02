@@ -13,8 +13,6 @@ function o = mresize(m, sz, varargin)
   %  o                output array. [nx ny ...]
   %
   
-
-
   s = size(m);
   if length(s) == 2, s = [s 1]; end
   if length(sz) == 1, sz = [sz sz]; end

@@ -19,7 +19,9 @@ function o = ccfilt2(m, p, varargin)
   %  o                filtered image. [x y ...]
   %
 
-  [conn] = setopts(varargin, {'conn', 4});
+  % set default arguments
+  v = ap2s(varargin);
+  conn = def(v, 'conn', 4);
 
   [nx,ny,nz] = size(m);
   o = zeros(size(m));

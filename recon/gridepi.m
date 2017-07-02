@@ -19,7 +19,10 @@ function o = gridepi(r, k, varargin)
   %  o                EPI gridded data. [x y z]
   %
 
-  [nx, flyback] = setopts(varargin, {'nx', [], 'flyback', 0});
+  % set default arguments
+  v = ap2s(varargin);
+  flyback = def(v, 'flyback', 0);
+  nx      = def(v, 'nx', []);
 
   [np,nv,nc,ns] = size(r);
   

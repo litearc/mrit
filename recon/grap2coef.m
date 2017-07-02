@@ -24,7 +24,10 @@ function c = grap2coef(r, s, varargin)
   %  particular with regards to using 'bicg' to solve the linear system.
   %
 
-  [solv, lam] = setopts(varargin, {'solv', 'mld', 'lam', 0});
+  % set default arguments
+  v = ap2s(varargin);
+  lam   = def(v, 'lam', 0);
+  solv  = def(v, 'solv', 'mld');
 
   % calculate various # points
   [np, nv, nc] = size(r);

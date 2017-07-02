@@ -56,9 +56,19 @@ function m = repi(e, r, k, varargin)
   %  m                reconstructed image. [x y z time]
   %
 
-  [nx, out, l, f, acs, fdc, tell, B0map, es] = setopts(varargin, {'nx', [], ...
-    'out', 'm', 'l', [],  'f', [], 'acs', [], 'fdc', 0, 'tell', 1, ...
-    'B0map', [], 'es', []});
+  % set default arguments
+  v = ap2s(varargin);
+  acs     = def(v, 'acs', []);
+  B0map   = def(v, 'B0map', []);
+  es      = def(v, 'es', []);
+  f       = def(v, 'f', []);
+  fdc     = def(v, 'fdc', 0);
+  l       = def(v, 'l', []);
+  nx      = def(v, 'nx', []);
+  osf     = def(v, 'osf', 3);
+  out     = def(v, 'out', 'm');
+  tell    = def(v, 'tell', 1);
+  use_mex = def(v, 'mex', 1);
 
   if tell, fprintf('repi: initializing ...\n'); end
 
@@ -115,6 +125,7 @@ function m = repi(e, r, k, varargin)
     case 2, pcm = 2;
   end
 
+  t0 = tic;
   % 1D phase correction ........................................................
   if pcm == 1
 
@@ -182,13 +193,25 @@ function m = repi(e, r, k, varargin)
       r1 = zeros(np, nv, nc);
       r1(:,1:2:end,:) = r(:,1:2:end,:,is,1);
       r1(:,2:2:end,:) = r(:,2:2:end,:,is,2);
-      r1 = gridepi(r1, ko, 'flyback', 1, 'nx', nx);
+      if use_mex && exist('gridepim')
+        r1 = gridepim(r1, ko, nx, 1);
+        r1 = mifftc(r1);
+        r1 = mfftc(r1(cen(nx,osf*nx),:,:));
+      else
+        r1 = gridepi(r1, ko, 'flyback', 1, 'nx', nx);
+      end
 
       % readout in <- direction
       r2 = zeros(np, nv, nc);
       r2(:,1:2:end,:) = r(:,1:2:end,:,is,2);
       r2(:,2:2:end,:) = r(:,2:2:end,:,is,1);
-      r2 = gridepi(r2, ke, 'flyback', 1, 'nx', nx);
+      if use_mex && exist('gridepim')
+        r2 = gridepim(r2, ke, nx, 1);
+        r2 = mifftc(r2);
+        r2 = mfftc(r2(cen(nx,osf*nx),:,:));
+      else
+        r2 = gridepi(r2, ke, 'flyback', 1, 'nx', nx);
+      end
       
       % even-echo images
       m1e = zeros(nx,nv,nc);
@@ -213,7 +236,13 @@ function m = repi(e, r, k, varargin)
         end
 
         % get odd and even echo images from EPI data
-        eg = gridepi(e(:,:,:,is,it), ko, 'nx', nx);
+        if use_mex && exist('gridepim')
+          eg = gridepim(e(:,:,:,is,it), ko, nx, 0);
+          eg = mifftc(eg);
+          eg = mfftc(eg(cen(nx,osf*nx),:,:));
+        else
+          eg = gridepi(e(:,:,:,is,it), ko, 'nx', nx);
+        end
         mo = zeros(nx,nv,nc);
         mo(:,1:2:end,:) = eg(:,1:2:end,:);
         mo = dft2(mo, 'comb', 'no');
@@ -236,8 +265,8 @@ function m = repi(e, r, k, varargin)
 
   % GRAPPA
   if ~isempty(l)
-    if ~isempty(f), o = grap2dft(o, l, f, 'out', 'k', 'tell', tell); end
-    if ~isempty(acs), o = grap2dft(o, l, o(:,acs,:,:,:), 'out', 'k', 'tell', tell); end
+    if ~isempty(f), o = grap2dft(o, l, f, 'out', 'k', 'tell', tell, 'mex', use_mex); end
+    if ~isempty(acs), o = grap2dft(o, l, o(:,acs,:,:,:), 'out', 'k', 'tell', tell, 'mex', use_mex); end
   end
 
   % B0 map correction
@@ -252,7 +281,8 @@ function m = repi(e, r, k, varargin)
       vt(i1) = pc(1)*i1+pc(2);
       vt = vt-vt(1);
       vt = vt*es;
-      m = epifmc(o, B0map, 'vt', vt);
+      m = epifmc(permute(o,[1 2 4 3 5]), B0map, 'vt', vt, 'tell', tell, 'mex', use_mex);
+      m = permute(m,[1 2 4 3 5]);
     end
     if strcmp(out, 'k')
       m = dft2(m, 'comb', 'no', 'dir', 'fwd');

@@ -19,7 +19,10 @@ function cycplot(o, x, y, xl, yl, t)
   fig(8,6);
   h = guidata(hf);
 
-  [h.onescl h.ylim] = setopts(o, {'onescl', 0, 'ylim', []});
+  % set default arguments
+  v = ap2s(o);
+  h.onescl = def(v, 'onescl', 0);
+  h.ylim   = def(v, 'ylim', []);
 
   h.x = x;
   h.y = y;
