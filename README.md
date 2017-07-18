@@ -14,6 +14,9 @@ following categories:
 - data visualization
 - other miscellaneous tools
   
+![tools](doc/tools.png)
+A showcase of some of the tools found in this library.
+
 I developed these tools during my PhD at Stanford University, but they are not
 related specifically to my research. If you do work in MRI sequence development,
 you may find this library useful. The tools found in the library are organized

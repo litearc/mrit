@@ -27,7 +27,7 @@ m = m.*repmat(s, [1 1 1 nt]);
 % compute activation maps. the glm does 4th-order polynomial detrending by
 % default (see glm.m for what the various arguments do).
 [t,c,p] = glm(m, ts, gts, tr, 'dob', 1, 'sdb', .25);
-th = cstat('p', 't', .001, nt, 'tr', tr); % t-score for p < 0.001
+th = cstat('p', 't', 1e-6, nt, 'tr', tr); % t-score for p < 1e-6
 
 % display image (see imdisp.m for what the various arguments do).
 % the slices were acquired at an oblique orientation, so they look a little
@@ -35,6 +35,7 @@ th = cstat('p', 't', .001, nt, 'tr', tr); % t-score for p < 0.001
 % faces "up" on the screen.
 imdisp(m(:,:,:,1), 'o', t, 'oith', th, 'cblab', 't-score', ...
   'olim', max(abs(t(:)))*[-1 1]);
+set(gcf, 'name', 'fMRI activation map');
 
 % display raw image data
 show4d(m);
