@@ -51,6 +51,11 @@ function m = repi(e, r, k, varargin)
   %                   (if possible). the echo-spacing must also be provided.
   %                   (Hz) [x y z]
   %  es               echo-spacing. (ms)
+  %  coilmaps         coil sensitivity maps. if supplied, images are combined
+  %                   using sensitivity maps to retain phase. if B0 correction
+  %                   is done, it is highly recommended that the coil maps are
+  %                   provided, so that the correction is performed on a single
+  %                   combined image instead of each coil image. [x y z coils]
   %
   %  outputs ...................................................................
   %  m                reconstructed image. [x y z time]
@@ -58,17 +63,18 @@ function m = repi(e, r, k, varargin)
 
   % set default arguments
   v = ap2s(varargin);
-  acs     = def(v, 'acs', []);
-  B0map   = def(v, 'B0map', []);
-  es      = def(v, 'es', []);
-  f       = def(v, 'f', []);
-  fdc     = def(v, 'fdc', 0);
-  l       = def(v, 'l', []);
-  nx      = def(v, 'nx', []);
-  osf     = def(v, 'osf', 3);
-  out     = def(v, 'out', 'm');
-  tell    = def(v, 'tell', 1);
-  use_mex = def(v, 'mex', 1);
+  acs      = def(v, 'acs', []);
+  B0map    = def(v, 'B0map', []);
+  coilmaps = def(v, 'coilmaps', []);
+  es       = def(v, 'es', []);
+  f        = def(v, 'f', []);
+  fdc      = def(v, 'fdc', 0);
+  l        = def(v, 'l', []);
+  nx       = def(v, 'nx', []);
+  osf      = def(v, 'osf', 3);
+  out      = def(v, 'out', 'm');
+  tell     = def(v, 'tell', 1);
+  use_mex  = def(v, 'mex', 1);
 
   if tell, fprintf('repi: initializing ...\n'); end
 
@@ -256,6 +262,7 @@ function m = repi(e, r, k, varargin)
         m(:,:,is,it) = sqrt(sum(abs(ms).^2,3));
         o(:,:,:,is,it) = dft2(ms, 'comb', 'no', 'dir', 'fwd');
       end
+
     end
 
   end % ........................................................................
@@ -267,6 +274,12 @@ function m = repi(e, r, k, varargin)
   if ~isempty(l)
     if ~isempty(f), o = grap2dft(o, l, f, 'out', 'k', 'tell', tell, 'mex', use_mex); end
     if ~isempty(acs), o = grap2dft(o, l, o(:,acs,:,:,:), 'out', 'k', 'tell', tell, 'mex', use_mex); end
+  end
+
+  % combine images using coil sensitivities
+  if ~isempty(coilmaps) && ~isempty(B0map)
+    o = permute(mifftc(o), [1 2 4 3 5]);
+    o = mfftc(combcoils(o, coilmaps));
   end
 
   % B0 map correction

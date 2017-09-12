@@ -17,10 +17,10 @@ function M = ifftc(m, varargin)
 
   ss = sum(abs(m(:)).^2);
   if isempty(dims),
-    M = fftshift(ifftn(fftshift(m)));
+    M = ifftshift(ifftn(ifftshift(m)));
   else
     for i = 1:length(dims)
-      m = fftshift(ifft(fftshift(m,dims(i)),[],dims(i)),dims(i));
+      m = ifftshift(ifft(ifftshift(m,dims(i)),[],dims(i)),dims(i));
     end
     M = m;
   end
