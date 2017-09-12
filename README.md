@@ -35,11 +35,11 @@ section.
 
 ## Setup
 
-To setup the MRIT library, add the `mrit` folder to the matlab path. The
-`startup.m` file gets executed automatically when matlab starts up, and adds the
-various folders in the library to the matlab path. In matlab, run the `setup.m`
-script. This needs to be done only once, and performs initializations such as
-compiling mex functions.
+To setup the MRIT library, run the `addpaths.m` file, which adds various folders
+in the library to the matlab path. If you want this to happen automatically when
+matlab starts, run it from within your matlab `startup.m` file. In matlab, run
+the `setup.m` script (this only needs to be done only once, and performs
+initializations such as compiling mex functions).
 
 There are some other libraries (listed below) that may also be useful to you.
 These are used by some of the tools in the MRIT library if certain options are
