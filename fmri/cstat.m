@@ -18,7 +18,10 @@ function o = cstat(a, b, u, n, varargin)
   %                   of the hemodynamic response function.
   %
 
-  [tr] = setopts(varargin, {'tr', inf});
+  % set default arguments
+  v = ap2s(varargin);
+  tr = def(v, 'tr', inf);
+
   df = tsdf(n, tr);
 
   % https://afni.nimh.nih.gov/sscc/gangc/tr.html

@@ -39,7 +39,7 @@ function m = dft2(r, varargin)
   end
 
   for i = 1:nc
-    for j = 1:no,
+    for j = 1:no
       mc(:,:,i,j) = ffftc(r(:,:,i,j));
     end
   end

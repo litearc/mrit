@@ -42,10 +42,6 @@ function [M, t] = bloch(rf, g, p, varargin)
   %  M                magnetization response. [nx ny nz 3]
   %
   
-  [dt, gam, M0, T1, T2, B0, B1, np, use_mex, out, time] = setopts(varargin, ...
-    {'dt', .004, 'gam', 4.258, 'M0', [], 'T1', [], 'T2', [], 'B0', [], ...
-    'B1', [], 'np', 64, 'mex', [], 'out', 'all', 'time', 0});
-
   % set default arguments
   v = ap2s(varargin);
   B0      = def(v, 'B0', []);
