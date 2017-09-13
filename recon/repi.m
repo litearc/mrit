@@ -151,7 +151,7 @@ function m = repi(e, r, k, varargin)
           ee(:,ic) = ee(:,ic)-round(ee(hx,ic)/(2*pi))*2*pi;
         end
         ss = sqrt(sum(abs(mm).^2,2));
-        s = mask(ss);
+        s = boolean(mask2(ss));
         y = median(ee, 2);
         p(iv,:) = pfit(x(s), y(s), 1, 'w', ss(s))';
         a(iv) = angle(mm(ipmax,icmax));
