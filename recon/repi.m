@@ -56,6 +56,9 @@ function m = repi(e, r, k, varargin)
   %                   is done, it is highly recommended that the coil maps are
   %                   provided, so that the correction is performed on a single
   %                   combined image instead of each coil image. [x y z coils]
+  %  R                acceleration factor. this is only used for a SENSE recon
+  %                   since for GRAPPA, the sampled lines are provided in `l`.
+  %                   (number)
   %
   %  outputs ...................................................................
   %  m                reconstructed image. [x y z time]
@@ -73,6 +76,7 @@ function m = repi(e, r, k, varargin)
   nx       = def(v, 'nx', []);
   osf      = def(v, 'osf', 3);
   out      = def(v, 'out', 'm');
+  R        = def(v, 'R', []);
   tell     = def(v, 'tell', 1);
   use_mex  = def(v, 'mex', 1);
 
@@ -270,22 +274,28 @@ function m = repi(e, r, k, varargin)
   % exit out of carriage-return
   if tell, fprintf('\n'); end
 
-  % GRAPPA
-  if ~isempty(l)
-    if ~isempty(f), o = grap2dft(o, l, f, 'out', 'k', 'tell', tell, 'mex', use_mex); end
-    if ~isempty(acs), o = grap2dft(o, l, o(:,acs,:,:,:), 'out', 'k', 'tell', tell, 'mex', use_mex); end
-  end
-
-  % combine images using coil sensitivities
-  if ~isempty(coilmaps) && ~isempty(B0map)
-    o = permute(mifftc(o), [1 2 4 3 5]);
-    o = mfftc(combcoils(o, coilmaps));
+  if ~isempty(R)
+    % SENSE
+    o = dft2(o, 'comb', 'no');
+    o = sense(o, permute(coilmaps,[1 2 4 3 5]), 'tell', 1);
+  else
+    % GRAPPA
+    if ~isempty(l)
+      if ~isempty(f), o = grap2dft(o, l, f, 'out', 'k', 'tell', tell, 'mex', use_mex); end
+      if ~isempty(acs), o = grap2dft(o, l, o(:,acs,:,:,:), 'out', 'k', 'tell', tell, 'mex', use_mex); end
+    end
+    % combine images using coil sensitivities
+    if ~isempty(coilmaps) && ~isempty(B0map)
+      o = permute(mifftc(o), [1 2 4 3 5]);
+      o = mfftc(combcoils(o, coilmaps));
+    end
   end
 
   % B0 map correction
   if ~isempty(B0map)
     if isempty(l) % epi
       m = epifmc(o, B0map, 'dt', es);
+    elseif ~isempty(R) % SENSE
     else % GRAPPA
       i0 = find(~l); i1 = find(l);
       pc = polyfit(i1, 0:length(i1)-1, 1);

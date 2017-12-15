@@ -4,10 +4,10 @@ function [g, i] = gepi(kxm, kym, nl, varargin)
   %  phase-encode dimension along y.
   %
   %  note:
-  %  the k-space extents 'kxs' and 'kys' are in units of 1/cm, so the gradients
+  %  the k-space extents 'kxm' and 'kym' are in units of 1/cm, so the gradients
   %  depend on the gyromagnetic ratio 'gam', set for proton by default.
   %
-  %  function [g i] = gepi(kxmax, kymax, nl, varargin)
+  %  function [g i] = gepi(kxm, kym, nl, varargin)
   %
   %  inputs ....................................................................
   %  kxm              max kx position (total kx extent is +/- kxm). (1/cm)

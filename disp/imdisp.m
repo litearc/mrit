@@ -96,12 +96,18 @@ function h = imdisp(u, varargin)
   if ~strcmp(cblab, ''), cbon = 1; end
   
   % make underlay double
-  if ~isreal(u), u = abs(u); end
+  if ~isreal(u)
+    disp('warning: complex input. displaying magnitude...');
+    u = abs(u);
+  end
   if islogical(u), u = double(u); end
   u = double(u);
 
   if isempty(ulim)
     ulim = lims(u);
+    if ulim(1) == ulim(2) % single value, will generate error
+      ulim = ulim+[-.5,+.5];
+    end
   end
 
   % set various overlay parameters .............................................
