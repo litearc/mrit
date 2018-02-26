@@ -108,6 +108,10 @@ function h = imdisp(u, varargin)
     if ulim(1) == ulim(2) % single value, will generate error
       ulim = ulim+[-.5,+.5];
     end
+  else
+    if length(ulim) == 1 % make range +/- ulim
+      ulim = [-ulim +ulim];
+    end
   end
 
   % set various overlay parameters .............................................
